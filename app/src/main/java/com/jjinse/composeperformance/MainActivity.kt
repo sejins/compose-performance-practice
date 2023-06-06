@@ -11,13 +11,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.jjinse.composeperformance.practice.BestCalculation
+import com.jjinse.composeperformance.practice.BestLazyLayout
 import com.jjinse.composeperformance.practice.WorstCalculation
+import com.jjinse.composeperformance.practice.WorstLazyLayout
 import com.jjinse.composeperformance.ui.theme.ComposePerformanceTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,14 +31,14 @@ class MainActivity : ComponentActivity() {
             ComposePerformanceTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Column {
-                        var count by remember {
-                            mutableStateOf(0)
+                        val list: SnapshotStateList<Long> = remember {
+                            mutableStateListOf(1, 2, 3, 4, 5)
                         }
-                        BestCalculation(value1 = "value1", value2 = count)
+                        BestLazyLayout(list = list)
                         Button(onClick = {
-                            count++
+                            list.add(index = 2, element = System.currentTimeMillis())
                         }) {
-                            Text(text = "button")
+                            Text(text = "append value")
                         }
                     }
                 }
