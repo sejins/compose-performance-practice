@@ -109,7 +109,7 @@ fun BestReadingState() {
         }
 
         // Recomposition block : BestTitle
-        BestTitle1(title = "This is a title") { scrollState.value }
+        BestTitle2(title = "This is a title") { scrollState.value }
     }
 }
 
