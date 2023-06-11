@@ -14,8 +14,13 @@ fun heavyCalculation(value: String): String {
 }
 
 @Composable
-fun Item(text: String) {
-    log("Item($text) recomposition!")
+fun Item(
+    text: String,
+    logEnabled: Boolean = true
+) {
+    if (logEnabled) {
+        log("Item($text) recomposition!")
+    }
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(text = text)
     }
