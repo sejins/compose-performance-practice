@@ -1,7 +1,6 @@
 package com.jjinse.composeperformance.practice
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -18,11 +18,18 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jjinse.composeperformance.R
 import com.jjinse.composeperformance.utils.log
 
 /**
@@ -126,4 +133,33 @@ private fun WorstTitle(
         text = title,
         textAlign = TextAlign.Center
     )
+}
+
+@Composable
+fun MultipleFrameRequired() {
+    log("MultipleFrameRequired Composable")
+    Box {
+        var imageHeightPx by remember { mutableStateOf(0) }
+
+        Image(
+            painter = painterResource(R.drawable.ic_launcher_background),
+            contentDescription = "I'm above the text",
+            modifier = Modifier
+                .fillMaxWidth()
+                .onSizeChanged { size ->
+                    // Don't do this
+                    imageHeightPx = size.height
+                }
+        )
+
+        Text(
+            text = "I'm below the image",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                top = with(LocalDensity.current) { imageHeightPx.toDp() }
+            ),
+            textAlign = TextAlign.Center
+        )
+    }
 }
